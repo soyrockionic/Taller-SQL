@@ -198,6 +198,16 @@ AND re.nroReparac IN (
   WHERE rr.precio < 15000);
 
 
+/*9. Listar nombre, stock y precio de repuestos que hayan sido utilizados por todos los tecnicos.*/
+
+SELECT r.nombre, r.stock, r.precio
+FROM Repuesto r
+INNER JOIN RepuestoReparacion rr ON r.codRep = rr.codRep
+INNER JOIN Reparacion re ON rr.nroReparac = re.nroReparac
+GROUP BY r.nombre, r.stock, r.precio
+HAVING COUNT(DISTINCT re.codTec) = (SELECT COUNT(*) FROM Tecnico);
+
+
 -- 10. Listar fecha, tecnico y precio total de aquellas reparaciones que necesitaron al menos 4
      -- repuestos distintos
 
