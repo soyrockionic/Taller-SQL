@@ -43,7 +43,6 @@ CREATE TABLE Poda (
     FOREIGN KEY (nroArbol) REFERENCES Arbol(nroArbol)
 );
 
-
 -- =================================== Datos =====================================
 
 -- Localidades (6)
@@ -88,7 +87,6 @@ INSERT INTO Poda VALUES (8, '2024-10-11', '40999000', 6);   -- Jorge poda Pino
 INSERT INTO Poda VALUES (9, '2025-01-20', '40999000', 7);   -- Jorge poda Ceibo
 INSERT INTO Poda VALUES (10,'2025-03-05', '30111222', 7);   -- Carlos poda Ceibo
 INSERT INTO Poda VALUES (11, '2022-06-15', '30111222', 8); -- Carlos poda Tilo en 2022
-
 
 -- ================================== Querys =====================================
 
@@ -164,6 +162,23 @@ AND p.DNI IN (
   FROM Poda po
   WHERE fecha >= '2024-01-01' AND po.fecha < '2025-01-01')
 ORDER BY p.apellido, p.nombre;
+
+
+/*6. Listar DNI, apellido, nombre, telefono y fecha de nacimiento de podadores que solo podaron arboles de 
+especie 'Coniferas'.*/
+
+SELECT p.DNI, p.nombre, p.apellido, p.telefono, p.fnac
+FROM Podador p
+WHERE p.DNI IN (
+  SELECT po.DNI
+  FROM Poda po
+  INNER JOIN Arbol a ON po.nroArbol = a.nroArbol
+  WHERE a.especie = 'Coniferas')
+AND p.DNI NOT IN (
+  SELECT po.DNI
+  FROM Poda po
+  INNER JOIN Arbol a ON po.nroArbol = a.nroArbol
+  WHERE a.especie != 'Coniferas');
 
 
 -- 7. Listar especies de arboles que se encuentren en la localidad de ‘La Plata’ y tambien en la
